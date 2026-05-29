@@ -1,0 +1,72 @@
+{
+  "skill_name": "drawio-diagrams",
+  "evals": [
+    {
+      "id": 1,
+      "name": "serverless-image-resize",
+      "prompt": "Create a draw.io architecture diagram (.drawio file) showing a simple serverless image resize pipeline: a user uploads an image to an S3 bucket, which triggers a Lambda function that resizes it using a Python library, writes the thumbnail to a second S3 bucket, and records the metadata in DynamoDB. Save the file to /tmp/drawio-eval-1/diagram.drawio and also export SVG+PNG using the skill's export script.",
+      "expected_output": "A valid .drawio file using the skill's AWS icon patterns: S3 buckets as green (#7AA116) filled tiles, Lambda as orange (#ED7100), DynamoDB as fuchsia (#C925D1), with arrows following the 2026 AWS preset (1.25pt black, classic solid filled heads) and numbered callouts on each arrow. Validator should pass with 0 failures. SVG and PNG should be generated.",
+      "files": [],
+      "expectations": [
+        "The file /tmp/drawio-eval-1/diagram.drawio exists and is valid XML with mxGraphModel page=\"1\" and background=\"#FFFFFF\"",
+        "The S3 bucket icons use fillColor=#7AA116 (Storage green), not any other color",
+        "The Lambda icon uses fillColor=#ED7100 (Compute orange)",
+        "The DynamoDB icon uses fillColor=#C925D1 (Databases fuchsia), NOT red or blue",
+        "All edges use strokeColor=#000000 (black) and strokeWidth=1.25, NOT #232F3E navy",
+        "All edges use endArrow=classic with endFill=1 (solid filled head), NOT endArrow=open or endFill=0",
+        "Every edge has edgeStyle=orthogonalEdgeStyle and rounded=0 (sharp corners)",
+        "Numbered callout circles sit on the arrows themselves (near arrow midpoints), not in a separate margin column",
+        "Labels are 12pt Arial fontColor=#232F3E, prefixed with AWS/Amazon (e.g. \"Amazon S3\", \"AWS Lambda\"), max 2 lines",
+        "Running scripts/validate_drawio.py on the output reports 0 failures",
+        "The skill's scripts/export_diagrams.py was invoked and produced both a .svg and .png file in /tmp/drawio-eval-1/",
+        "No XML comments (<!-- -->) appear anywhere in the .drawio file"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "vpc-with-subnets",
+      "prompt": "Draw an AWS architecture diagram in draw.io showing a three-tier web app inside a VPC: an Application Load Balancer in a public subnet routes HTTPS traffic to EC2 instances running in an Auto Scaling group across two private subnets in different AZs, and the EC2 instances connect to an Aurora cluster (writer + reader) in a database subnet. Include the VPC container, two Availability Zones, and the subnet groupings. Save to /tmp/drawio-eval-2/diagram.drawio and export SVG+PNG.",
+      "expected_output": "A .drawio file that correctly uses AWS group containers: group_vpc2 for the VPC, plain dashed rects (no grIcon) for AZs with stroke #147EBA, group_security_group stencil for subnets with different stroke/fill colors per tier, and shape=mxgraph.aws4.groupCenter for Auto Scaling with dashed orange #D86613. Aurora icons must be fuchsia (#C925D1). Validator passes 0 failures.",
+      "files": [],
+      "expectations": [
+        "The file /tmp/drawio-eval-2/diagram.drawio exists and is valid XML",
+        "The VPC container uses grIcon=group_vpc2 (NOT the legacy group_vpc)",
+        "Subnets use grIcon=group_security_group (or equivalent AWS stencil), NOT the nonexistent group_public_subnet or group_private_subnet",
+        "Each Availability Zone container is a plain dashed rectangle with strokeColor=#147EBA and has NO grIcon attribute",
+        "The Auto Scaling group container uses shape=mxgraph.aws4.groupCenter with dashed strokeColor=#D86613 orange",
+        "All AWS container group shapes use fillColor=none (not a pale teal or pale green fill)",
+        "Aurora icons use fillColor=#C925D1 (Databases fuchsia), NOT #DD344C (red) and NOT #3334B9 (blue)",
+        "The Application Load Balancer uses fillColor=#8C4FFF (Networking purple)",
+        "EC2 icons use fillColor=#ED7100 (Compute orange)",
+        "Container strokeColor and fontColor match the skill's conventions (e.g., VPC purple with purple font)",
+        "Nested containers have at least 5px buffer between their borders (no overlapping container strokes)",
+        "Container titles do not overlap any child icons inside them",
+        "Running scripts/validate_drawio.py reports 0 failures",
+        "SVG and PNG exports exist in /tmp/drawio-eval-2/"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "ml-inference-with-groups",
+      "prompt": "Create a draw.io diagram for a machine learning inference system: API Gateway receives REST requests and authenticates via Cognito, then invokes a Lambda function which looks up a feature vector in DynamoDB, calls a SageMaker real-time endpoint for prediction, caches the response in ElastiCache, and writes request logs to CloudWatch Logs. Group related services logically (e.g. data stores, compute, observability) using AWS container stencils. Use numbered callouts on each arrow and include a numbered-steps list below the diagram explaining each step in active voice naming the service. Save to /tmp/drawio-eval-3/diagram.drawio and export SVG+PNG.",
+      "expected_output": "A narrative-driven diagram with logical domain groupings, every arrow numbered with a callout ON the arrow (not in a margin column), and a steps list below showing active-voice descriptions. SageMaker must be purple (#8C4FFF, the Analytics category, not teal). Cognito red (#DD344C). DynamoDB/ElastiCache fuchsia (#C925D1). Validator passes.",
+      "expectations": [
+        "The file /tmp/drawio-eval-3/diagram.drawio exists and is valid XML",
+        "SageMaker icon uses fillColor=#8C4FFF (Analytics/ML purple), NOT #01A88D teal",
+        "Cognito icon uses fillColor=#DD344C (Security red), NOT fuchsia",
+        "DynamoDB and ElastiCache icons both use fillColor=#C925D1 (Databases fuchsia)",
+        "API Gateway uses fillColor=#8C4FFF (Networking purple)",
+        "Lambda uses fillColor=#ED7100 (Compute orange)",
+        "CloudWatch Logs uses fillColor=#E7157B (Management pink)",
+        "Services are grouped into at least 2 logical domain containers (e.g. \"Data Stores\", \"Compute\", \"Observability\")",
+        "Numbered callout circles appear ON the arrows (positioned near arrow midpoints), not stacked in a separate column next to the diagram",
+        "A numbered-steps list exists below the diagram as plain-text rows, each with a small numbered circle and an active-voice description that names the AWS service",
+        "Every arrow has a corresponding numbered callout",
+        "All edges are orthogonalEdgeStyle with rounded=0 and straight perpendicular segments (no diagonal lines, no unnecessary bends)",
+        "Running scripts/validate_drawio.py reports 0 failures and 0 warnings (or only the acceptable bare-service-name warning)",
+        "The exported PNG is readable without zooming (diagram fits roughly one-screen)",
+        "SVG and PNG exports exist in /tmp/drawio-eval-3/"
+      ]
+    }
+  ]
+}
